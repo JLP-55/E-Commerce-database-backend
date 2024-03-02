@@ -16,15 +16,27 @@ Category.hasMany(Product, {
   foreignKey: "category_id",
 });
 
-// // Products belongToMany Tags (through ProductTag)
-// Product.hasMany(Tag, {
-//   foreignKey: "product_id",
-// });
+// Products belongToMany Tags (through ProductTag)
+Product.belongsToMany(Tag, {
+  /*foreignKey: "product_id", constraints: false*/
 
-// // Tags belongToMany Products (through ProductTag)
-// Tag.belongsToMany(Product, {
-//   foreignKey: "product_id",
-// });
+  through: {
+    model: ProductTag,
+    unique: false,
+  },
+  as: "random_alias"
+});
+
+// Tags belongToMany Products (through ProductTag)
+Tag.belongsToMany(Product, {
+  /*foreignKey: "product_id", constraints: false*/
+
+  through: {
+    model: ProductTag,
+    unique: false,
+  },
+  as: "random_alias"
+});
 
 module.exports = {
   Product,

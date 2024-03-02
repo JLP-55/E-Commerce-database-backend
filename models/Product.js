@@ -21,17 +21,22 @@ Product.init(
       allowNull: false,
     },
     price: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       // Needs to validate the value is a decimal.
-      // Also, the documentation states that "type: DataTypes.DECIMAL(11,10)" whatever that means.
+      validate: {
+        isDecimal: true,
+      },
     },
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // Sets a default value
-      // @Default(10),
+      // Sets a default value. Having issues with the syntax.
+      defaultValue: 10,
       // Needs to validate the value is numeric
+      validate: {
+        isNumeric: true,
+      },
     },
     category_id: {
       type: DataTypes.INTEGER,
