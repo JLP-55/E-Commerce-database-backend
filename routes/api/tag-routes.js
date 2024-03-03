@@ -3,13 +3,17 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
+// Not currently getting the required data for Tags
+// Need the model Product to be included
 router.get('/', async (req, res) => {
   // find all tags
   try {
-  const tagData = await Tag.findAll();
+  const tagData = await Tag.findAll({
+    inculde: [{model: Product}]
+  });
   res.status(200).json(tagData);
   } catch (err) {
-    res.status(500).json({message: "error"});
+    res.status(500).json(err);
   }
   // be sure to include its associated Product data
 });
@@ -31,13 +35,46 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Product data
 });
 
+// Still to do: all items below:
+
+// .then template
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create(req.body)
+  .then(tag => {
+    if(!req.body){
+      res.json("You must have a body")
+    }
+    res.json(tag)
+  })
+  .catch(err => res.json(err))
 });
 
-router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
-});
+// Try/catch template
+// router.post('/', async (req, res) => {
+//   // create a new tag
+//   try {
+//     const tag = Tag.create(req.body)
+//     if(!req.body){
+//       res.json("You must have a body")
+//     }
+//     res.json(tag)
+//   } catch(err) {
+//     res.json(err)
+//   }
+// });
+
+// router.put('/:id', (req, res) => {
+//   // update a tag's name by its `id` value
+//   Tag.update(req.body. {
+//     where: {
+//       req.params.id,
+//     },
+//   })
+//   .then(tag => {
+//     if (req.body.)
+//   })
+// });
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value

@@ -50,6 +50,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// This route currently doesn't work.
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
     Product.update(req.body, {
@@ -60,28 +61,28 @@ router.put('/:id', (req, res) => {
     .then((product) => {
       if (req.body.tagIds && req.body.tagIds.length) {
         
-        ProductTag.findAll({
+        Product.findAll({
           where: { product_id: req.params.id }
         }).then((productTags) => {
           // create filtered list of new tag_ids
-          const productTagIds = productTags.map(({ tag_id }) => tag_id);
-          const newProductTags = req.body.tagIds
-          .filter((tag_id) => !productTagIds.includes(tag_id))
-          .map((tag_id) => {
+          const product = productTags.map(({ product_id }) => product_id);
+          const newProduct = req.body.tagIds
+          .filter((product_id) => !product.includes(product_id))
+          .map((product_id) => {
             return {
               product_id: req.params.id,
-              tag_id,
+              product_id,
             };
           });
 
             // figure out which ones to remove
-          const productTagsToRemove = productTags
-          .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
+          const productsToRemove = productTags
+          .filter(({ product_id }) => !req.body.tagIds.includes(product_id))
           .map(({ id }) => id);
                   // run both actions
           return Promise.all([
-            ProductTag.destroy({ where: { id: productTagsToRemove } }),
-            ProductTag.bulkCreate(newProductTags),
+            Product.destroy({ where: { id: productsToRemove } }),
+            Product.bulkCreate(newProduct),
           ]);
         });
       }
@@ -110,7 +111,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json(categoryData);
   } catch (err) {
-    res.status(500).json({message: "error"});
+    res.status(500).json(err);
   }
 });
 

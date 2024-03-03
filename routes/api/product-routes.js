@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     });
     res.status(200).json(productData);
   } catch (err) {
-    res.status(500).json({message: "error"});
+    res.status(500).json(err);
   }
   // be sure to include its associated Category and Tag data
 });
@@ -41,12 +41,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', (req, res) => {
   /* req.body should look like this...
     {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      category_id: 1,
-      tagIds: [1, 2, 3, 4]
-    }
+      "product_name": "band merch",
+      "price": 45.50,
+      "stock": 23,
+      "category_id": 3,
+      "tagIds": [1, 8]
+}
   */
   Product.create(req.body)
     .then((product) => {
@@ -121,8 +121,8 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
   try {
-    const productTagId = await ProductTag.findAll({
-      where: {product_id: req.params.id}
+    const productTagId = await Product.destroy({
+      where: {id: req.params.id}
     })
     if (!productTagId) {
       res.status(404).json({message: "no tag with this id"});
