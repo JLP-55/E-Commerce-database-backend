@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   // find all products
   try {
     const productData = await Product.findAll({
-      include: [{model: Category}],
+      include: [{model: Category}, {model: Tag}],
     });
     res.status(200).json(productData);
   } catch (err) {
@@ -17,13 +17,14 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Category and Tag data
 });
 
+// Access the parameter :id using "params"
 // get one product
 router.get('/:id', async (req, res) => {
   // find a single product by its `id`
   try {
     const productData = await Product.findByPk(req.params.id, {
       // Why can't you add model and tag here?
-      // include: [{model: Category}, {model: Tag}],
+      include: [{model: Category}, {model: Tag}],
     });
     if (!productData) {
       res.status(404).json({message: "no such product exists"});
@@ -43,12 +44,14 @@ router.post('/', (req, res) => {
       product_name: "Basketball",
       price: 200.00,
       stock: 3,
+      category_id: 1,
       tagIds: [1, 2, 3, 4]
     }
   */
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
+      // if the user chose to add tagIds... .map(tag_id) and return 
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
@@ -56,7 +59,9 @@ router.post('/', (req, res) => {
             tag_id,
           };
         });
+        // return ProductTag(this is the model) and bulkCreate(const productTagIdArr)
         return ProductTag.bulkCreate(productTagIdArr);
+        // have to put another .then after running a method...
       }
       // if no product tags, just respond
       res.status(200).json(product);
