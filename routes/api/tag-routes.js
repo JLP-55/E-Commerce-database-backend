@@ -6,10 +6,17 @@ const { Tag, Product, ProductTag } = require('../../models');
 router.get('/', async (req, res) => {
   // find all tags
   try {
-  const tagData = await Tag.findAll();
+  const tagData = await Tag.findAll({
+    include: [
+      {
+        model: Product,
+          through: ProductTag,
+      }
+    ]
+  });
   res.status(200).json(tagData);
   } catch (err) {
-    res.status(500).json({message: "error"});
+    res.status(500).json(err);
   }
   // be sure to include its associated Product data
 });
@@ -31,12 +38,58 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Product data
 });
 
+// Still to do: all items below:
+
+// .then template
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create(req.body)
+  .then(tag => {
+    if(!req.body){
+      res.json("You must have a body")
+    }
+    res.json(tag)
+  })
+  .catch(err => res.json(err))
 });
 
-router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
+// Try/catch template
+router.post('/', async (req, res) => {
+  // create a new tag
+  try {
+    const tag = Tag.create(req.body)
+    if(!req.body){
+      res.json("You must have a body")
+    }
+    res.json(tag)
+  } catch(err) {
+    res.json(err)
+  }
+});
+
+router.put('/:id', async (req, res) => {
+//   // update a tag's name by its `id` value
+  try {
+    const tagData = Tag.update(req.body, {
+      where: {
+        id: req.params.id
+      }
+    });
+    res.status(200).json(tagData)
+    // if(!req.body) {
+    //   res.json("you must have a body");
+    // }
+  // Tag.update(req.body. {
+  //   where: {
+  //     req.params.id,
+  //   },
+  // })
+  // .then(tag => {
+  //   if (req.body.)
+  // })
+  } catch (err) {
+    res.status(500).json(err)
+  }
 });
 
 router.delete('/:id', (req, res) => {
