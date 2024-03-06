@@ -41,36 +41,38 @@ router.get('/:id', async (req, res) => {
 // Still to do: all items below:
 
 // .then template
-router.post('/', (req, res) => {
-  // create a new tag
-  Tag.create(req.body)
-  .then(tag => {
-    if(!req.body){
-      res.json("You must have a body")
-    }
-    res.json(tag)
-  })
-  .catch(err => res.json(err))
-});
+// router.post('/', (req, res) => {
+//   // create a new tag
+//   Tag.create(req.body)
+//   .then(tag => {
+//     if(!req.body){
+//       res.json("You must have a body")
+//     }
+//     res.json(tag)
+//   })
+//   .catch(err => res.json(err))
+// });
 
 // Try/catch template
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const tag = Tag.create(req.body)
+    const tagData = Tag.create({
+      tag_name: req.body.tag_name,
+    });
     if(!req.body){
       res.json("You must have a body")
-    }
-    res.json(tag)
+    };
+    res.status(200).json(tagData)
   } catch(err) {
-    res.json(err)
+    res.status(500).json(err);
   }
 });
 
 router.put('/:id', async (req, res) => {
 //   // update a tag's name by its `id` value
   try {
-    const tagData = Tag.update(req.body, {
+    const tagData = await Tag.update(req.body, {
       where: {
         id: req.params.id
       }
@@ -92,8 +94,21 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
+  try {
+    const tagData = await Tag.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!tagData) {
+      res.status(202).json({message: "no such tag exists"});
+    };
+    res.status(200).json(tagData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
