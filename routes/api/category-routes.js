@@ -50,49 +50,35 @@ router.post('/', async (req, res) => {
   }
 });
 
-// This route currently doesn't work.
-router.put('/:id', (req, res) => {
-  // update a category by its `id` value
-    Product.update(req.body, {
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((product) => {
-      if (req.body.tagIds && req.body.tagIds.length) {
-        
-        Product.findAll({
-          where: { product_id: req.params.id }
-        }).then((productTags) => {
-          // create filtered list of new tag_ids
-          const product = productTags.map(({ product_id }) => product_id);
-          const newProduct = req.body.tagIds
-          .filter((product_id) => !product.includes(product_id))
-          .map((product_id) => {
-            return {
-              product_id: req.params.id,
-              product_id,
-            };
-          });
-
-            // figure out which ones to remove
-          const productsToRemove = productTags
-          .filter(({ product_id }) => !req.body.tagIds.includes(product_id))
-          .map(({ id }) => id);
-                  // run both actions
-          return Promise.all([
-            Product.destroy({ where: { id: productsToRemove } }),
-            Product.bulkCreate(newProduct),
-          ]);
-        });
-      }
-
-      return res.json(product);
-    })
-    .catch((err) => {
-      // console.log(err);
-      res.status(400).json(err);
+// all you need is the "id": "number", for the insomnia request
+router.put('/:id', async (req, res) => {
+  try {
+    const categoryData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      } 
     });
+    if (!categoryData) {
+      res.status(202).json({message: "no such category exists"});
+    }
+    res.status(200).json(categoryData);
+  } catch (err) {
+    res.status(500).json(err);
+  };
+  // update a category by its `id` value
+    // Category.update(req.body, {
+    //   where : {
+    //     id: req.params.id,
+    //   },
+    // })
+    // .then((categoryId) => {
+    //   Category.findAll({
+    //     where: {category: req.params.id}
+    //   }).then((category) => {
+    //     // create filtered list of new category...
+    //     const 
+    //   })
+    // })
 });
 
 router.delete('/:id', async (req, res) => {

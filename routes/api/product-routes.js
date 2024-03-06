@@ -74,16 +74,23 @@ router.post('/', (req, res) => {
 });
 
 // update product
+// use these values as the input
+   // {
+   //   "product_name": "new item",
+   //    "id": 9
+   // }
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
+  // Trying to update...
+    // is connected to the model
     where: {
       id: req.params.id,
     },
   })
     .then((product) => {
       if (req.body.tagIds && req.body.tagIds.length) {
-        
+
         ProductTag.findAll({
           where: { product_id: req.params.id }
         }).then((productTags) => {
