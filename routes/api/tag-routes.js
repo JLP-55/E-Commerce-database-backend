@@ -57,13 +57,14 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const tagData = Tag.create({
+    const tagData = await Tag.create({
       tag_name: req.body.tag_name,
     });
     if(!req.body){
       res.json("You must have a body")
     };
     res.status(200).json(tagData)
+    console.log(tagData)
   } catch(err) {
     res.status(500).json(err);
   }
