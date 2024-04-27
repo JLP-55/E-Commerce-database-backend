@@ -31,7 +31,6 @@ Product.init(
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // Sets a default value. Having issues with the syntax.
       defaultValue: 10,
       // Needs to validate the value is numeric
       validate: {

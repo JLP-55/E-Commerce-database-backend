@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Tag, Product, ProductTag } = require('../../models');
 
-// The `/api/tags` endpoint
+// The "/api/tags" endpoint
 
 router.get('/', async (req, res) => {
   // find all tags
@@ -18,7 +18,6 @@ router.get('/', async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-  // be sure to include its associated Product data
 });
 
 router.get('/:id', async (req, res) => {
@@ -35,25 +34,8 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({message: "error"});
   }
-  // be sure to include its associated Product data
 });
 
-// Still to do: all items below:
-
-// .then template
-// router.post('/', (req, res) => {
-//   // create a new tag
-//   Tag.create(req.body)
-//   .then(tag => {
-//     if(!req.body){
-//       res.json("You must have a body")
-//     }
-//     res.json(tag)
-//   })
-//   .catch(err => res.json(err))
-// });
-
-// Try/catch template
 router.post('/', async (req, res) => {
   // create a new tag
   try {
@@ -71,25 +53,14 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-//   // update a tag's name by its `id` value
+  // update a tag's name by its `id` value
   try {
     const tagData = await Tag.update(req.body, {
       where: {
         id: req.params.id
       }
     });
-    res.status(200).json(tagData)
-    // if(!req.body) {
-    //   res.json("you must have a body");
-    // }
-  // Tag.update(req.body. {
-  //   where: {
-  //     req.params.id,
-  //   },
-  // })
-  // .then(tag => {
-  //   if (req.body.)
-  // })
+    res.status(200).json({message: "tag updated"});
   } catch (err) {
     res.status(500).json(err)
   }
@@ -106,7 +77,7 @@ router.delete('/:id', async (req, res) => {
     if (!tagData) {
       res.status(202).json({message: "no such tag exists"});
     };
-    res.status(200).json(tagData);
+    res.status(200).json({message: "tag deleted"});
   } catch (err) {
     res.status(500).json(err);
   }

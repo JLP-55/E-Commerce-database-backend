@@ -15,12 +15,12 @@
 
 ### Links
 Watch these simple walkthrough videos demonstrating the functionality of the appliction<br>
-[1.) category route functionality](www.google.com)<br>
-[2.) product route functionality](www.google.com)<br>
-[3.) tag route functionality](www.google.com)<br>
-[4.) how to start/seed the database as well as the creation of the database from mysql](www.google.com)<br>
+[1.) product route functionality](https://youtu.be/huyiuiGSmuU)<br>
+[2.) category route functionality](https://youtu.be/hqagoAqIPlk)<br>
+[3.) tag route functionality](https://youtu.be/B5Er9zevx40)<br>
+[4.) how to start/seed the database as well as the creation of the database from mysql](https://www.youtube.com/watch?v=ou6urJ9J0cI)<br>
 
-[Here is a link to the applications code.](https://google.com/)
+[Here is a link to the applications code.](https://github.com/JLP-55/E-Commerce-database-backend)
 
 ### Licence
 
